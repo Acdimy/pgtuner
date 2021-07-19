@@ -98,10 +98,10 @@ class DB_Agent:
     def check_connection_params(self):
         # Check whether the binary files of the database can be located through environment variables.
         try:
-            self.exec_command_on_host("which gsql")
-            self.exec_command_on_host("which gaussdb")
-            self.exec_command_on_host("which gs_guc")
-            self.exec_command_on_host("which gs_ctl")
+            self.exec_command_on_host("which psql")
+            self.exec_command_on_host("which postgres")
+            # self.exec_command_on_host("which gs_guc")
+            self.exec_command_on_host("which pg_ctl")
         except ExecutionError as e:
             logging.exception("An exception occurred while checking connection parameters: %s", e)
             raise OptionError("The parameters about SSH login user are incorrect. Please check.\n"
@@ -111,8 +111,8 @@ class DB_Agent:
 
         # Check whether the third-party libraries can be properly loaded.
         try:
-            self.exec_command_on_host("gaussdb --version")
-            self.exec_command_on_host("gsql --version")
+            self.exec_command_on_host("postgres --version")
+            self.exec_command_on_host("psql --version")
         except ExecutionError as e:
             logging.exception("An exception occurred while checking connection parameters: %s", e)
             raise DBStatusError("The database environment is incorrectly configured. "
@@ -128,9 +128,12 @@ class DB_Agent:
                                     "Check whether the database is started. ")
 
             # Get database instance pid and data_path.
-            self.data_path = self.exec_statement(
-                "SELECT datapath FROM pg_node_env;"
-            )[0][0]
+            # self.data_path = self.exec_statement(
+            #     # TODO: name of pg_node_env
+            #     "SELECT datapath FROM pg_node_env;"
+            # )[0][0]
+            # ???
+            self.data_path = self.exec_command_on_host("echo $PGDATA")
         except ExecutionError as e:
             logging.exception("An exception occurred while checking connection parameters: %s", e)
             raise DBStatusError("Failed to login to the database. "
@@ -139,6 +142,7 @@ class DB_Agent:
 
         # Check whether the current user has sufficient permission to perform tuning.
         try:
+            # TODO: name of pg_user
             self.exec_statement("select * from pg_user;")
         except ExecutionError as e:
             logging.exception("An exception occurred while checking connection parameters: %s", e)
@@ -159,6 +163,7 @@ class DB_Agent:
             check_special_character(knob)
             wherein_list.append("'%s'" % knob)
 
+        # TODO: name of pg_settings KEEP
         sql = "SELECT name, setting, min_val, max_val FROM pg_settings WHERE name IN ({})".format(
             ','.join(wherein_list)
         )
@@ -190,7 +195,7 @@ class DB_Agent:
         :param timeout: Int type. Unit second.
         :return: The parsed result from SQL statement execution.
         """
-        command = "gsql -p {db_port} -U {db_user} -d {db_name} -W {db_user_pwd} -c \"{sql}\";".format(
+        command = "psql -p {db_port} -U {db_user} -d {db_name} -W {db_user_pwd} -c \"{sql}\";".format(
             db_port=self.db_port,
             db_user=self.db_user,
             db_name=self.db_name,
@@ -212,8 +217,8 @@ class DB_Agent:
         :return: True means running and vice versa.
         """
         try:
-            stdout = self.exec_command_on_host("ps -ux | grep gaussdb | wc -l")
-            at_least_count = 1  # Includes one 'grep gaussdb' command.
+            stdout = self.exec_command_on_host("ps -ux | grep postgres | wc -l")
+            at_least_count = 1  # Includes one 'grep postgres' command.
             if int(stdout.strip()) <= at_least_count:
                 return False
         except ExecutionError:
@@ -282,14 +287,19 @@ class DB_Agent:
 
     def get_knob_value(self, name):
         check_special_character(name)
+        # TODO: name of pg_settings KEEP
         sql = "SELECT setting FROM pg_settings WHERE name = '{}';".format(name)
         value = self.exec_statement(sql)[0][0]
         return value
 
     def set_knob_value(self, name, value):
+        # TODO: essential modification, exchange the gs_guc commend with SQL lines.
         logging.info("change knob: [%s=%s]", name, value)
         try:
-            self.exec_command_on_host("gs_guc reload -c \"%s=%s\" -D %s" % (name, value, self.data_path))
+            self.exec_statement("ALTER SYSTEM SET %s=%s" % (name, value)) # '128MB'
+            if name == "shared_buffers":
+                self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path))
+            # self.exec_command_on_host("gs_guc reload -c \"%s=%s\" -D %s" % (name, value, self.data_path))
         except ExecutionError as e:
             if str(e).find('Success to perform gs_guc!') < 0:
                 logging.warning(e)
@@ -303,10 +313,12 @@ class DB_Agent:
             self.exec_statement("checkpoint;")  # Prevent the database from being shut down for a long time.
         except ExecutionError:
             logging.warning("Cannot checkpoint perhaps due to bad GUC settings.")
-        self.exec_command_on_host("gs_ctl stop -D {data_path}".format(data_path=self.data_path),
-                                  ignore_status_code=True)
-        self.exec_command_on_host("gs_ctl start -D {data_path}".format(data_path=self.data_path),
-                                  ignore_status_code=True)
+        # TODO: name of gs_ctl
+        self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path))
+        # self.exec_command_on_host("gs_ctl stop -D {data_path}".format(data_path=self.data_path),
+        #                           ignore_status_code=True)
+        # self.exec_command_on_host("gs_ctl start -D {data_path}".format(data_path=self.data_path),
+        #                           ignore_status_code=True)
 
         if self.is_alive():
             logging.info("The database restarted successfully.")
