@@ -195,7 +195,8 @@ class DB_Agent:
         :param timeout: Int type. Unit second.
         :return: The parsed result from SQL statement execution.
         """
-        command = "psql -p {db_port} -U {db_user} -d {db_name} -W {db_user_pwd} -c \"{sql}\";".format(
+        # DELETE -W
+        command = "psql -p {db_port} -U {db_user} -d {db_name} -c \"{sql}\";".format(
             db_port=self.db_port,
             db_user=self.db_user,
             db_name=self.db_name,
