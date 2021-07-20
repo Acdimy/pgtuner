@@ -262,7 +262,7 @@ class OpenGaussMetric:
     @cached_property
     def block_size(self):
         return self._get_numeric_metric(
-            "select setting / 1024 from pg_settings where name = 'block_size';"
+            "select setting::int4 / 1024 from pg_settings where name = 'block_size';"
         )  # unit: kB
 
     @property
