@@ -133,7 +133,7 @@ class DB_Agent:
             #     "SELECT datapath FROM pg_node_env;"
             # )[0][0]
             # ???
-            self.data_path = self.exec_command_on_host("echo $PGDATA")
+            self.data_path = "/usr/local/pgsql/data"
         except ExecutionError as e:
             logging.exception("An exception occurred while checking connection parameters: %s", e)
             raise DBStatusError("Failed to login to the database. "
