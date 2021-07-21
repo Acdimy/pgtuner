@@ -178,20 +178,20 @@ class OpenGaussKnobAdvisor:
         suitable_mem = round4((total_mem - min_free_mem) * omega / nb_gaussdb)
         min_mem = round4((total_mem - min_free_mem) * omega_min / nb_gaussdb)
 
-        if min_mem <= self.metric["max_process_memory"] <= suitable_mem:
-            self.report.print_info("We only found %s gaussdb process(es). "
-                                   "In this case, your 'max_process_memory' setting may be just fitting."
-                                   % self.metric.nb_gaussdb)
+        # if min_mem <= self.metric["max_process_memory"] <= suitable_mem:
+        #     self.report.print_info("We only found %s gaussdb process(es). "
+        #                            "In this case, your 'max_process_memory' setting may be just fitting."
+        #                            % self.metric.nb_gaussdb)
 
-        if self.metric["max_process_memory"] > suitable_mem:
-            self.report.print_warn("We only found %s gaussdb process(es). "
-                                   "In this case, your 'max_process_memory' setting may be a bit large."
-                                   % self.metric.nb_gaussdb)
+        # if self.metric["max_process_memory"] > suitable_mem:
+        #     self.report.print_warn("We only found %s gaussdb process(es). "
+        #                            "In this case, your 'max_process_memory' setting may be a bit large."
+        #                            % self.metric.nb_gaussdb)
 
-        if self.metric["max_process_memory"] < min_mem:
-            self.report.print_bad("We only found %s gaussdb process(es). "
-                                  "In this case, your 'max_process_memory' setting is heavily small."
-                                  % self.metric.nb_gaussdb)
+        # if self.metric["max_process_memory"] < min_mem:
+        #     self.report.print_bad("We only found %s gaussdb process(es). "
+        #                           "In this case, your 'max_process_memory' setting is heavily small."
+        #                           % self.metric.nb_gaussdb)
 
         # Should always return the recommendation because other recommendations depend on it.
         return instantiate_knob(name="max_process_memory",
