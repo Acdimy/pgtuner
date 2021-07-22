@@ -21,7 +21,7 @@ from tuner.exceptions import ExecutionError
 # WARN: You need to import data into the database and SQL statements in the following path will be executed.
 # The program automatically collects the total execution duration of these SQL statements.
 path = '/path/to/tpch/queries'  # modify this path which contains benchmark SQL files.
-cmd = "find %s -type f -name '*.sql' -exec gsql -U {user} -W {password} -d {db} -p {port} -f {} > /dev/null \\;"
+cmd = "find %s -type f -name '*.sql' -exec psql -U {user} -d {db} -p {port} -f {} > /dev/null \\;"
 
 
 def run(remote_server, local_host):
