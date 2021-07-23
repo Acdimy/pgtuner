@@ -98,6 +98,7 @@ class RLAgent:
     def fit(self, steps, nb_max_episode_steps=50, verbose=0):
         print("Come into rl fit...")
         self.agent.fit(self.env, nb_steps=steps, nb_max_episode_steps=nb_max_episode_steps, verbose=verbose)
+        print("Come outside rl fit...")
 
     def save(self, filepath):
         self.agent.save_weights(filepath, overwrite=True)
