@@ -64,7 +64,7 @@ class DB_Env(Env):
         :param delta: Delta means relative change for actions.
         :return: Return Quadruplet: (observation, reward, done, info).
         """
-        # print("Step here.")
+        print("Step here.")
         if delta:
             cur_knobs = self.db.get_knob_normalized_vector()
             new_knobs = np.add(cur_knobs, action).clip(0, 1)
