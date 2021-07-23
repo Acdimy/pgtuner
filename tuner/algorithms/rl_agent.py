@@ -95,7 +95,7 @@ class RLAgent:
         ddpg.compile(Adam(), metrics=['mae'])
         return ddpg
 
-    def fit(self, steps, nb_max_episode_steps=50, verbose=0):
+    def fit(self, steps, nb_max_episode_steps=50, verbose=1):
         print("Come into rl fit...")
         self.agent.fit(self.env, nb_steps=steps, nb_max_episode_steps=nb_max_episode_steps, verbose=verbose, visualize=True)
         print("Come outside rl fit...")
