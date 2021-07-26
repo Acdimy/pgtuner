@@ -316,8 +316,8 @@ class DB_Agent:
             logging.warning("Cannot checkpoint perhaps due to bad GUC settings.")
         # TODO: name of gs_ctl
         # self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path))
-        self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path))
-        self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path))
+        self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
+        self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
         # self.exec_command_on_host("gs_ctl stop -D {data_path}".format(data_path=self.data_path),
         #                           ignore_status_code=True)
         # self.exec_command_on_host("gs_ctl start -D {data_path}".format(data_path=self.data_path),
