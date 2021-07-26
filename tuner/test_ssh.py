@@ -15,5 +15,7 @@ ssh = ExecutorFactory() \
             .set_port(5432) \
             .get_executor()
 
-stdout, stderr = ssh.exec_command_sync('ls -l', timeout=60)
+stdout, stderr = ssh.exec_command_sync('pg_ctl stop -D /usr/local/pgsql/data', timeout=60)
+stdout1, stderr1 = ssh.exec_command_sync('pg_ctl start -D /usr/local/pgsql/data', timeout=60)
 print(stdout, stderr)
+print(stdout1, stderr1)
