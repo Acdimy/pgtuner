@@ -184,6 +184,7 @@ class SSH(Executor):
                     if chan.recv_stderr_ready():
                         stderr.append(chan.recv_stderr(buff_size))
                     if timeout and (time.time() - start_ts) > timeout:
+                        print(stdout, stderr)
                         break
                     time.sleep(0.1)
 
