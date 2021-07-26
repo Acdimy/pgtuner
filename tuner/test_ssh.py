@@ -16,3 +16,4 @@ ssh = ExecutorFactory() \
             .get_executor()
 
 stdout, stderr = ssh.exec_command_sync('which psql', timeout=60)
+print(stdout, stderr)
