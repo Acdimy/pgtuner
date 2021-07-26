@@ -184,7 +184,6 @@ class SSH(Executor):
                     if chan.recv_stderr_ready():
                         stderr.append(chan.recv_stderr(buff_size))
                     if timeout and (time.time() - start_ts) > timeout:
-                        print(stdout, stderr)
                         break
                     time.sleep(0.1)
 
@@ -278,6 +277,7 @@ class LocalExec(Executor):
         else:
             # Pipeline does not support running in shell=False, so we run it with the 'bash -c' command.
             split_cmd = ['bash', '-c', command] if '|' in command or ';' in command else shlex.split(command)
+            print(split_cmd)
             proc = subprocess.Popen(split_cmd,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
