@@ -300,10 +300,15 @@ class DB_Agent:
             self.exec_statement("ALTER SYSTEM SET %s=%s" % (name, value)) # '128MB'
             if name == "shared_buffers":
                 print("setting shared_buffers")
-                self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
-                # self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path), ignore_status_code=True, timeout=60)
+                self.exec_command_on_host("ls")
+                self.exec_command_on_host("ls")
+                self.exec_command_on_host("ls")
+                self.exec_command_on_host("ls")
+                self.exec_command_on_host("ls")
+                # self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
+                self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path), ignore_status_code=True, timeout=60)
                 # print("Stopped")
-                # self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path), ignore_status_code=True, timeout=60)
+                self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path), ignore_status_code=True, timeout=60)
                 print("end setting shared_buffers")
             # self.exec_command_on_host("gs_guc reload -c \"%s=%s\" -D %s" % (name, value, self.data_path))
         except ExecutionError as e:
