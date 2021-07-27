@@ -29,8 +29,8 @@ import time
 import paramiko
 
 proc = subprocess.Popen(['pg_ctl', 'restart', '-D', '/usr/local/pgsql/data'],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
+                        # stdout=subprocess.PIPE,
+                        # stderr=subprocess.PIPE,
                         shell=False)
 streams = proc.communicate(timeout=60)
 print("Test...")
