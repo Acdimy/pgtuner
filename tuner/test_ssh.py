@@ -33,3 +33,4 @@ proc = subprocess.Popen(['pg_ctl', 'restart', '-D', '/usr/local/pgsql/data'],
                         stderr=subprocess.PIPE,
                         shell=False)
 streams = proc.communicate(timeout=60)
+print("Test...")
