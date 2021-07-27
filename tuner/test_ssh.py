@@ -28,10 +28,23 @@ import time
 
 import paramiko
 
-## Test1
-proc = subprocess.Popen(['pg_ctl', 'restart', '-D', '/usr/local/pgsql/data'],
-                        # stdout=subprocess.PIPE,
-                        # stderr=subprocess.PIPE,
+# ## Test1
+# proc = subprocess.Popen(['pg_ctl', 'restart', '-D', '/usr/local/pgsql/data'],
+#                         # stdout=subprocess.PIPE,
+#                         # stderr=subprocess.PIPE,
+#                         shell=False)
+# streams = proc.communicate(timeout=60)
+# print("Test...")
+
+## Test2
+proc = subprocess.Popen(['pg_ctl', 'stop', '-D', '/usr/local/pgsql/data'],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        shell=False)
+streams = proc.communicate(timeout=60)
+proc = subprocess.Popen(['pg_ctl', 'start', '-D', '/usr/local/pgsql/data'],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
                         shell=False)
 streams = proc.communicate(timeout=60)
 print("Test...")
