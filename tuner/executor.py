@@ -277,7 +277,7 @@ class LocalExec(Executor):
         else:
             # Pipeline does not support running in shell=False, so we run it with the 'bash -c' command.
             split_cmd = ['bash', '-c', command] if '|' in command or ';' in command else shlex.split(command)
-            print(split_cmd)
+            # print(split_cmd)
             proc = subprocess.Popen(split_cmd,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
