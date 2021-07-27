@@ -50,7 +50,15 @@ import paramiko
 # print("Test...")
 
 ## Test3
-proc = subprocess.Popen(['pg_ctl', 'start', '-D', '/usr/local/pgsql/data'],
+# proc = subprocess.Popen(['pg_ctl', 'start', '-D', '/usr/local/pgsql/data'],
+#                         stdout=subprocess.PIPE,
+#                         stderr=subprocess.PIPE,
+#                         shell=False)
+# streams = proc.communicate(timeout=60)
+# print("Test...")
+
+## Test4
+proc = subprocess.Popen(['pg_ctl', 'restart', '-D', '/usr/local/pgsql/data', '-l', 'pgsql.log'],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         shell=False)
