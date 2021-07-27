@@ -300,7 +300,7 @@ class DB_Agent:
             self.exec_statement("ALTER SYSTEM SET %s=%s" % (name, value)) # '128MB'
             if name == "shared_buffers":
                 print("setting shared_buffers")
-                self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
+                self.exec_command_on_host("pg_ctl restart -D {data_path} -l pgsql.log".format(data_path=self.data_path), ignore_status_code=True)
                 # self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path), ignore_status_code=True, timeout=60)
                 # print("Stopped")
                 # self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path), ignore_status_code=True, timeout=60)
@@ -320,9 +320,9 @@ class DB_Agent:
         except ExecutionError:
             logging.warning("Cannot checkpoint perhaps due to bad GUC settings.")
         # TODO: name of gs_ctl
-        # self.exec_command_on_host("pg_ctl restart -D {data_path}".format(data_path=self.data_path))
-        self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
-        self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
+        self.exec_command_on_host("pg_ctl restart -D {data_path} -l pgsql.log".format(data_path=self.data_path), ignore_status_code=True)
+        # self.exec_command_on_host("pg_ctl stop -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
+        # self.exec_command_on_host("pg_ctl start -D {data_path}".format(data_path=self.data_path), ignore_status_code=True)
         # self.exec_command_on_host("gs_ctl stop -D {data_path}".format(data_path=self.data_path),
         #                           ignore_status_code=True)
         # self.exec_command_on_host("gs_ctl start -D {data_path}".format(data_path=self.data_path),
