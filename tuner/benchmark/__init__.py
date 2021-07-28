@@ -31,7 +31,6 @@ local_ssh = ExecutorFactory() \
 
 def get_benchmark_instance(script, path, cmd, db_info):
     name = script.rstrip('.py')
-    print("cmd", cmd)
     if not os.path.exists(os.path.join(os.path.dirname(__file__), name + '.py')):
         raise ConfigureError('Incorrect configuration option benchmark_script. '
                              'Enter the filename of the script in the benchmark directory '
@@ -63,7 +62,6 @@ def get_benchmark_instance(script, path, cmd, db_info):
         .replace('{user}', db_info['db_user']) \
         .replace('{password}', db_info['db_user_pwd']) \
         .replace('{db}', db_info['db_name'])
-    print("cmd", bm.cmd)
 
     # Wrap remote server shell as an API and pass it to benchmark instance.
     def wrapper(server_ssh):
