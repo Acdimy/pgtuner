@@ -117,7 +117,6 @@ def procedure_main(mode, db_info, config):
         prompt_restart_risks()  # Users need to be informed of risks.
 
         recorder = Recorder(config['recorder_file'])
-        print("Benchmark: script-", config['benchmark_script'], " path-", config['benchmark_path'], " cmd-", config['benchmark_cmd'])
         bm = benchmark.get_benchmark_instance(config['benchmark_script'],
                                               config['benchmark_path'],
                                               config['benchmark_cmd'],
