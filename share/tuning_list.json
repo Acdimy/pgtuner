@@ -1,0 +1,16 @@
+{
+    "work_mem": {
+      "default": 65536,
+      "min": 65536,
+      "max": 655360,
+      "type": "int",
+      "restart": false
+    },
+    "shared_buffers": {
+      "default": 32000,
+      "min": 16000,
+      "max": 64000,
+      "type": "int",
+      "restart": true
+    }
+  }
